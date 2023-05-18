@@ -6,17 +6,17 @@ const TRAINING_SET = [
 ];
 const epsilon = 1e-3;
 const k = 1e-3;
-const gen = 5000;
+const gen = 1_000_000;
 
-export function linear_model(): number {
+export function linear_model(): number[] {
   let w = Math.random() * 10;
   let b = Math.random() * 1;
 
-  function cost(w: number, b: number) {
+  function cost(w: number, b: number): number {
     let cost = 0;
     for (let i = 0; i < TRAINING_SET.length; i++) {
       const x: number = TRAINING_SET[i][0];
-      const linf: number = x * w;
+      const linf: number = x * w + b;
       const expected: number = TRAINING_SET[i][1];
       const distance: number = linf - expected;
       cost += distance * distance;
@@ -32,5 +32,5 @@ export function linear_model(): number {
     b -= k * db;
   }
 
-  return cost(w, b);
+  return [w, b, cost(w, b)];
 }
