@@ -30,5 +30,3 @@ export function linear_model() {
     console.log(cost(w));
   }
 }
-
-linear_model();
