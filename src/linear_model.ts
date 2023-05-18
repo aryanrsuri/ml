@@ -1,14 +1,14 @@
-export const TRAINING_SET = [
+const TRAINING_SET = [
   [1, 2],
   [2, 4],
   [4, 8],
   [10, 20],
 ];
+const epsilon = 1e-3;
+const k = 1e-3;
+const gen = 5000;
 
-export function linear_model() {
-  const epsilon = 1e-3;
-  const k = 1e-3;
-  const gen = 2000;
+export function linear_model(): number {
   let w = Math.random() * 10;
   let b = Math.random() * 1;
 
@@ -16,12 +16,12 @@ export function linear_model() {
     let cost = 0;
     for (let i = 0; i < TRAINING_SET.length; i++) {
       const x: number = TRAINING_SET[i][0];
-      const linf: number = (x * w) + b;
+      const linf: number = x * w;
       const expected: number = TRAINING_SET[i][1];
       const distance: number = linf - expected;
       cost += distance * distance;
     }
-    return cost / TRAINING_SET.length;
+    return cost /= TRAINING_SET.length;
   }
 
   for (let i = 0; i < gen; i++) {
@@ -32,9 +32,5 @@ export function linear_model() {
     b -= k * db;
   }
 
-  console.log(`cost: ${cost(w, b)}\nw: ${w}\nbias: ${b}`);
-  console.log(
-    `test: 5 * m=2 == 10\nmodel: 5 * ${w} + ${b} = ${(5 * w) + b})`,
-  );
-  console.log(10 - (5 * w + b));
+  return cost(w, b);
 }
