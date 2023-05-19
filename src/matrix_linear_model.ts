@@ -12,7 +12,7 @@ import {
 
 export function matrix_linear_model(
   activation_function = sigmoid,
-): Matrix[] {
+): number | Error {
   const randn = Math.random();
 
   let m: Matrix = init_matrix(10, 1, randn);
