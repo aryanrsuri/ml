@@ -34,12 +34,29 @@ export const softmax = (v: number[]): number[] => {
   return prob_vector;
 };
 
-// export const comp_activation_f = (v: [number[]]) => {
-//   let min = 10_000;
-//   for (let i = 0; i < v.length; i++) {
-//     const cost = v[i][-1];
-//     min = Math.min(min, cost);
-//   }
-//
-//   return min;
-// };
+// Linear algebra support functions
+export type Matrix = number[][];
+export const init_matrix = (m: number, n: number, init_val = 0): Matrix => {
+  const matrix: Matrix = [];
+  for (let i = 0; i < m; i++) {
+    const row: number[] = [];
+    for (let j = 0; j < n; j++) {
+      row.push(init_val);
+    }
+
+    matrix.push(row);
+  }
+
+  return matrix;
+};
+
+export const dot_product = (m: Matrix, n: Matrix) => {
+};
+
+/** initiziale matrix of m x n space with some std. value
+ * @param 'm'  {number}
+ * @param 'n' {number}
+ * @param 'init_val' {number}
+ * @returns 'matrix' {number[][]}
+ */
+e;

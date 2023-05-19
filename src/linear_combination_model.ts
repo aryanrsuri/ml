@@ -28,7 +28,6 @@ const gen = 1_000_000;
 export function linear_combination_model(
   activation_function = sigmoid,
 ): number[] {
-  console.info(activation_function);
   const TRAINING_SET = AND_TRAINING_SET;
   let w1 = Math.random() * 10;
   let w2 = Math.random() * 10;
