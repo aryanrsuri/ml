@@ -1,4 +1,4 @@
-import { sigmoid } from "./lib.ts";
+import { LeReLu, ReLu, sigmoid, softmax, tanh } from "./lib.ts";
 
 const OR_TRAINING_SET = [
   [0, 0, 0],
@@ -14,18 +14,21 @@ const AND_TRAINING_SET = [
   [1, 1, 1],
 ];
 
-const XAND_TRAINING_SET = [
+const NAND_TRAINING_SET = [
   [0, 0, 1],
   [1, 0, 1],
   [0, 1, 1],
-  [0, 1, 0],
+  [1, 1, 0],
 ];
 
 const epsilon = 1e-3;
 const k = 1e-1;
 const gen = 1_000_000;
 
-export function linear_combination_model(): number[] {
+export function linear_combination_model(
+  activation_function = sigmoid,
+): number[] {
+  console.info(activation_function);
   const TRAINING_SET = AND_TRAINING_SET;
   let w1 = Math.random() * 10;
   let w2 = Math.random() * 10;
@@ -36,7 +39,7 @@ export function linear_combination_model(): number[] {
     for (let i = 0; i < TRAINING_SET.length; i++) {
       const x1: number = TRAINING_SET[i][0];
       const x2: number = TRAINING_SET[i][1];
-      const linf: number = sigmoid((x1 * w1) + (x2 * w2) + b);
+      const linf: number = activation_function((x1 * w1) + (x2 * w2) + b);
       const distance: number = linf - TRAINING_SET[i][2];
       cost += distance * distance;
     }
