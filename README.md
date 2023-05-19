@@ -1,16 +1,14 @@
 # Learning machine learning from scratchm
-### Why
--when the robots rise up, they will know I helped them
--i love math & computer science
-### How
--yt
--lots of textbooks i have from college
+### Why?
+* when the robots rise up, they will know I helped them
+* i love math & computer science
 
+### How?
+* yt
+* lots of textbooks i have from college
 
-
-
-### Planned
-# Utility Functions for Machine Learning
+### Plans?
+#### Utility Functions for Machine Learning
 1. Normalization/Scaling Functions
     - Min-Max Scaling: Normalize the data to a specific range (e.g., [0, 1]) using the following functions:
         minMaxScale(data: number[]): number[]: Apply min-max scaling to an array of numerical data.
