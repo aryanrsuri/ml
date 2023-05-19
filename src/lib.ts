@@ -36,7 +36,7 @@ export const softmax = (v: number[]): number[] => {
 
 // Linear algebra support functions
 export type Matrix = number[][];
-export const init_matrix = (m: number, n: number, init_val = 0): Matrix => {
+export const init_matrix = (m: number, n = 1, init_val = 0): Matrix => {
   const matrix: Matrix = [];
   for (let i = 0; i < m; i++) {
     const row: number[] = [];
@@ -50,7 +50,18 @@ export const init_matrix = (m: number, n: number, init_val = 0): Matrix => {
   return matrix;
 };
 
-export const dot_product = (m: Matrix, n: Matrix) => {
+export const dot_product = (m: Matrix, n: Matrix): number | Error => {
+  let dot_product = 0;
+  if (m.length !== n.length) {
+    return new Error(`m and n matrices un-equal space!`);
+  }
+  for (let i = 0; i < m.length; i++) {
+    const p: number = m[i][0] * n[i][0];
+    console.log(m[i][0], n[i][0]);
+    dot_product += p;
+  }
+
+  return dot_product;
 };
 
 /** initiziale matrix of m x n space with some std. value
@@ -59,4 +70,3 @@ export const dot_product = (m: Matrix, n: Matrix) => {
  * @param 'init_val' {number}
  * @returns 'matrix' {number[][]}
  */
-e;

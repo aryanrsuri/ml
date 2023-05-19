@@ -5,10 +5,10 @@ import { matrix_linear_model } from "./src/matrix_linear_model.ts";
 
 function main() {
   // console.lo(linear_model());
-  console.log(linear_combination_model(sigmoid));
-  console.log(linear_combination_model(ReLu));
-  console.log(linear_combination_model(LeReLu));
-  console.log(linear_combination_model(tanh));
+  // console.log(linear_combination_model(sigmoid));
+  // console.log(linear_combination_model(ReLu));
+  // console.log(linear_combination_model(LeReLu));
+  // console.log(linear_combination_model(tanh));
   console.log(matrix_linear_model());
 }
 
