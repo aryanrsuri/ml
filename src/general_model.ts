@@ -5,7 +5,7 @@ import {
   matrix_mult,
   matrix_render,
   matrix_sum,
-} from "./lib.ts";
+} from "../lib/algebra.ts";
 
 export function general_model() {
   const x: Matrix = matrix_alloc(2, 1);

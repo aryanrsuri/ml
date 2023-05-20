@@ -1,4 +1,4 @@
-import { LeReLu, ReLu, sigmoid, softmax, tanh } from "./lib.ts";
+import { LeReLu, ReLu, sigmoid, softmax, tanh } from "../lib/activations.ts";
 
 const OR_TRAINING_SET = [
   [0, 0, 0],

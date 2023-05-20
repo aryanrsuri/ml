@@ -1,39 +1,3 @@
-export const sigmoid = (x: number): number => {
-  return 1 / (1 + Math.exp(-x));
-};
-
-export const ReLu = (x: number): number => {
-  if (x < 0) {
-    return 0;
-  }
-  return x;
-};
-
-export const LeReLu = (x: number): number => {
-  if (x < 0) {
-    return Math.exp(x);
-  }
-  return x;
-};
-
-export const tanh = (x: number): number => {
-  return Math.tanh(x);
-};
-
-export const softmax = (v: number[]): number[] => {
-  const prob_vector: number[] = [];
-  let sum_exp = 0;
-  for (let i = 0; i < v.length; i++) {
-    sum_exp += Math.exp(v[i]);
-  }
-
-  for (let i = 0; i < v.length; i++) {
-    prob_vector.push(Math.exp(v[i]) / sum_exp);
-  }
-
-  return prob_vector;
-};
-
 /**
  * Struct to represent Matrix
  * @interface Matrix
@@ -46,13 +10,9 @@ export interface Matrix {
 
 /**
  * Computes the element of the matrix at position (m, n)
- *
  * @param {Matrix} a - Matrix
- *
  * @param {number} m - row
- *
  * @param {number} n - cols
- *
  * @returns {number} element at given tuple position
  */
 const matrix_enum = (a: Matrix, m: number, n: number): number[] => {
@@ -83,7 +43,7 @@ export const matrix_alloc = (m: number, n: number): Matrix => {
  * @param {Matrix} b
  * @returns {Matrix}
  */
-export const matrix_mult = (c: Matrix, a: Matrix, b: Matrix): Matrix => {
+export const matrix_mult = (c: Matrix, a: Matrix, b: Matrix): void => {
   for (let i = 0; i < a.data.length; i++) {
     console.log(i);
   }
@@ -96,7 +56,7 @@ export const matrix_mult = (c: Matrix, a: Matrix, b: Matrix): Matrix => {
  * @param {Matrix} b
  * @returns {Matrix}
  */
-export const matrix_sum = (c: Matrix, a: Matrix, b: Matrix): Matrix => {
+export const matrix_sum = (c: Matrix, a: Matrix, b: Matrix): void => {
   for (let i = 0; i < a.data.length; i++) {
     console.log(i);
   }
