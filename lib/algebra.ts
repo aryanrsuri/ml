@@ -9,6 +9,19 @@ export interface Matrix {
 }
 
 /**
+ * type to represent activiation functions
+ * @function activationfn
+ */
+export type activationfn = (x: number) => number;
+
+export type Model = {
+  inputs: Matrix;
+  layers_n: number;
+  weights: Matrix[];
+  biases: Matrix[];
+};
+
+/**
  * Initialises a new Matrix
  * @param {number} m
  * @param {number} n
@@ -30,7 +43,7 @@ export const matrix_alloc = (m: number, n: number): Matrix => {
  * @param {number} n - cols
  * @returns {number[]} position index, element value
  */
-const matrix_enum = (a: Matrix, m: number, n: number): number[] => {
+export const matrix_enum = (a: Matrix, m: number, n: number): number[] => {
   const pos = (m) * (a).n + (n);
   const elem = (a).data[pos];
   return [pos, elem];
@@ -108,14 +121,32 @@ export const matrix_fill = (a: Matrix, x: number): Matrix => {
  * @returns {void}
  */
 export const matrix_render = (a: Matrix): void => {
-  let render = "";
+  let renderer = "[\n";
   for (let i = 0; i < a.m; i++) {
     for (let j = 0; j < a.n; j++) {
       const [_, elem] = matrix_enum(a, i, j);
-      render += elem + " ";
+      renderer += "    " + elem + "";
     }
-    render += "\n";
+    renderer += " \n";
   }
 
-  console.log(render);
+  renderer += "]";
+  console.log(renderer);
+};
+
+/**
+ * Apply activation function to matrix
+ * @param {Matrix} a
+ * @param {activationfn} fn
+ * @returns {Matrix} m
+ */
+export const matrix_apply = (a: Matrix, fn: activationfn): Matrix => {
+  for (let i = 0; i < a.m; i++) {
+    for (let j = 0; j < a.m; j++) {
+      const [pos_a, elem_a] = matrix_enum(a, i, j);
+      a.data[pos_a] = fn(elem_a);
+    }
+  }
+
+  return a;
 };

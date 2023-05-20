@@ -1,5 +1,5 @@
-// import { LeReLu, ReLu, sigmoid, tanh } from "./src/lib.ts";
-import { general_model } from "./src/general_model.ts";
+import { sigmoid } from "./lib/activations.ts";
+import { general_model, xor_model } from "./src/general_model.ts";
 
 function main() {
   // console.lo(linear_model());
@@ -7,7 +7,7 @@ function main() {
   // console.log(linear_combination_model(ReLu));
   // console.log(linear_combination_model(LeReLu));
   // console.log(linear_combination_model(tanh));
-  console.log(general_model());
+  console.log(xor_model(sigmoid));
 }
 
 if (import.meta.main) main();
