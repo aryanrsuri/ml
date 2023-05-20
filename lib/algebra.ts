@@ -9,19 +9,6 @@ export interface Matrix {
 }
 
 /**
- * Computes the element of the matrix at position (m, n)
- * @param {Matrix} a - Matrix
- * @param {number} m - row
- * @param {number} n - cols
- * @returns {number} element at given tuple position
- */
-const matrix_enum = (a: Matrix, m: number, n: number): number[] => {
-  const pos = (m) * (a).n + (n);
-  const elem = (a).data[pos];
-  return [pos, elem];
-};
-
-/**
  * Initialises a new Matrix
  * @param {number} m
  * @param {number} n
@@ -34,6 +21,19 @@ export const matrix_alloc = (m: number, n: number): Matrix => {
     n: n,
     data: zeros,
   };
+};
+
+/**
+ * Returns the enumeration of Matrix position (m, n)
+ * @param {Matrix} a - Matrix
+ * @param {number} m - row
+ * @param {number} n - cols
+ * @returns {number[]} position index, element value
+ */
+const matrix_enum = (a: Matrix, m: number, n: number): number[] => {
+  const pos = (m) * (a).n + (n);
+  const elem = (a).data[pos];
+  return [pos, elem];
 };
 
 /**

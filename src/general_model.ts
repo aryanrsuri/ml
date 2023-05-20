@@ -1,20 +1,13 @@
-import {
-  Matrix,
-  matrix_alloc,
-  matrix_fill,
-  matrix_mult,
-  matrix_render,
-  matrix_sum,
-} from "../lib/algebra.ts";
+import * as m from "../lib/algebra.ts";
+import * as atf from "../lib/activations.ts";
 
-export function general_model() {
-  const x: Matrix = matrix_alloc(2, 1);
-  const y: Matrix = matrix_alloc(1, 2);
-  const z: Matrix = matrix_alloc(4, 4);
+export function general_model(activation_function = atf.sigmoid) {
+  const x: m.Matrix = m.matrix_alloc(2, 1);
+  const y: m.Matrix = m.matrix_alloc(1, 2);
+  const z: m.Matrix = m.matrix_alloc(4, 4);
 
-  return [
-    matrix_render(x),
-    matrix_render(y),
-    matrix_render(z),
-  ];
+  m.matrix_render(x);
+  m.matrix_render(y);
+  m.matrix_render(z);
+  return 0;
 }
