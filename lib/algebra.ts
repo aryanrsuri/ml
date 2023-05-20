@@ -43,23 +43,46 @@ const matrix_enum = (a: Matrix, m: number, n: number): number[] => {
  * @param {Matrix} b
  * @returns {Matrix}
  */
-export const matrix_mult = (c: Matrix, a: Matrix, b: Matrix): void => {
-  for (let i = 0; i < a.data.length; i++) {
-    console.log(i);
+export const matrix_mult = (
+  c: Matrix,
+  a: Matrix,
+  b: Matrix,
+): Matrix => {
+  if (a.n !== b.m || c.m !== a.m || c.n !== b.n) {
+    throw new Error(`matrix spaces are uequal`);
   }
+
+  for (let i = 0; i < c.m; i++) {
+    for (let j = 0; j < c.n; j++) {
+      const [pos_c] = matrix_enum(c, i, j);
+      for (let k = 0; k < a.n; k++) {
+        const [, elem_a] = matrix_enum(a, i, k);
+        const [, elem_b] = matrix_enum(b, k, j);
+        c.data[pos_c] += elem_a * elem_b;
+      }
+    }
+  }
+  return c;
 };
 
 /**
  * Calculates the sum of two matrices
  * @param {Matrix} c
  * @param {Matrix} a
- * @param {Matrix} b
  * @returns {Matrix}
  */
-export const matrix_sum = (c: Matrix, a: Matrix, b: Matrix): void => {
-  for (let i = 0; i < a.data.length; i++) {
-    console.log(i);
+export const matrix_sum = (c: Matrix, a: Matrix): Matrix => {
+  if (c.m !== a.m || c.n !== a.n) {
+    throw new Error(`matrix spaces are unequal`);
   }
+  for (let i = 0; i < c.m; i++) {
+    for (let j = 0; j < c.n; j++) {
+      const [pos_c] = matrix_enum(c, i, j);
+      const [_, elem_a] = matrix_enum(a, i, j);
+      c.data[pos_c] += elem_a;
+    }
+  }
+  return c;
 };
 
 /**
