@@ -52,13 +52,11 @@ pub fn main() !void {
 }
 
 test "Linear Model" {
-    // const y = try linear_model();
-    // for (training_set) |row| {
-    //     const res = y[0] * row[0] + y[1];
-    //     std.debug.print("\n{} * {} + {} = {} exp {}\n", .{ row[0], y[0], y[1], res, row[1] });
-    // }
-    //
-    var r = alg.sigmoid(3);
-
-    std.debug.print("\n{}\n", .{r});
+    const y = try linear_model();
+    for (training_set) |row| {
+        const res = y[0] * row[0] + y[1];
+        std.debug.print("\n{} * {} + {} = {} exp {}\n", .{ row[0], y[0], y[1], res, row[1] });
+    }
+    // var r = alg.sigmoid(3);
+    // std.debug.print("\n{}\n", .{r});
 }
