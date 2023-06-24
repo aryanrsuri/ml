@@ -15,6 +15,7 @@ pub const Matrix = struct {
     pub fn init(alloc: std.mem.Allocator, comptime m: usize, comptime n: usize) !Self {
         var space = m * n;
         var zeros = try std.ArrayList(f64).initCapacity(alloc, space);
+        try zeros.appendNTimes(0, space);
         return .{
             .m = m,
             .n = n,
@@ -32,14 +33,13 @@ pub const Matrix = struct {
             return null;
         }
         const position: usize = (m) * self.n + n;
-        const element = self.data.items[position];
-        const map = Map{ .pos = position, .elem = element };
+        const map = Map{ .pos = position, .elem = self.data.items[position] };
         return map;
     }
 
     fn fill(self: *Self, x: f64) !void {
         for (0..self.data.capacity) |i| {
-            try self.data.insert(i, x);
+            try self.data.replaceRange(i, 1, &[1]f64{x});
         }
     }
 
@@ -49,6 +49,7 @@ pub const Matrix = struct {
             var j: usize = 0;
             while (j < self.n) : (j += 1) {
                 const map = self.enumerate(i, j);
+                if (map == null) return error.NullSpace;
                 self.data.items[map.?.pos] = func(map.?.elem);
             }
         }
@@ -64,6 +65,7 @@ pub const Matrix = struct {
             while (j < C.n) : (j += 1) {
                 var k: usize = 0;
                 const map_C = C.enumerate(i, j);
+                if (map_C == null) return error.NullSpace;
                 while (k < self.n) : (k += 1) {
                     const map_A = self.enumerate(i, k);
                     const map_B = B.enumerate(k, j);
@@ -94,13 +96,9 @@ test "matrix" {
         b.deinit();
         c.deinit();
     }
-    _ = try b.fill(5);
-    _ = try c.fill(0);
-    _ = try m.data.append(1);
-    _ = try m.data.append(2);
-    _ = try m.data.append(3);
-    _ = try m.data.append(4);
 
+    _ = try m.fill(3);
+    _ = try b.fill(3);
     m.render("m");
     b.render("b");
 
