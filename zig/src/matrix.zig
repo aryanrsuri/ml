@@ -1,0 +1,113 @@
+const std = @import("std");
+const alg = @import("algebra.zig");
+const sigmoid = alg.sigmoid;
+const tanh = alg.tanh;
+const ReLu = alg.ReLu;
+
+pub const Map = struct { pos: usize, elem: f64 };
+pub const Matrix = struct {
+    const Self = @This();
+    m: usize,
+    n: usize,
+    data: std.ArrayList(f64),
+    allocator: std.mem.Allocator,
+
+    pub fn init(alloc: std.mem.Allocator, comptime m: usize, comptime n: usize) !Self {
+        var space = m * n;
+        var zeros = try std.ArrayList(f64).initCapacity(alloc, space);
+        return .{
+            .m = m,
+            .n = n,
+            .data = zeros,
+            .allocator = alloc,
+        };
+    }
+
+    fn deinit(self: *Self) void {
+        self.data.deinit();
+    }
+
+    fn enumerate(self: *Self, m: usize, n: usize) ?Map {
+        if (m > self.m or n > self.n or m < 0 or n < 0) {
+            return null;
+        }
+        const position: usize = (m) * self.n + n;
+        const element = self.data.items[position];
+        const map = Map{ .pos = position, .elem = element };
+        return map;
+    }
+
+    fn fill(self: *Self, x: f64) !void {
+        for (0..self.data.capacity) |i| {
+            try self.data.insert(i, x);
+        }
+    }
+
+    fn apply(self: *Self, comptime func: fn (f64) f64) !void {
+        var i: usize = 0;
+        while (i < self.m) : (i += 1) {
+            var j: usize = 0;
+            while (j < self.n) : (j += 1) {
+                const map = self.enumerate(i, j);
+                self.data.items[map.?.pos] = func(map.?.elem);
+            }
+        }
+    }
+
+    fn multiply(self: *Self, B: *Matrix, C: *Matrix) !*Matrix {
+        if (self.n != B.n or C.m != self.m or C.n != B.n) {
+            return error.MatrixSpaceUnequal;
+        }
+        var i: usize = 0;
+        while (i < C.m) : (i += 1) {
+            var j: usize = 0;
+            while (j < C.n) : (j += 1) {
+                var k: usize = 0;
+                const map_C = C.enumerate(i, j);
+                while (k < self.n) : (k += 1) {
+                    const map_A = self.enumerate(i, k);
+                    const map_B = B.enumerate(k, j);
+                    C.data.items[map_C.?.pos] += map_A.?.elem * map_B.?.elem;
+                }
+            }
+        }
+
+        return C;
+    }
+    fn render(self: *Self, title: []const u8) void {
+        std.debug.print("{s} [", .{title});
+        for (0..self.data.capacity) |i| {
+            std.debug.print(" {} ", .{self.data.items[i]});
+        }
+        std.debug.print("]\n", .{});
+    }
+};
+
+test "matrix" {
+    std.debug.print("\n", .{});
+    var m = try Matrix.init(std.testing.allocator, 2, 2);
+    var b = try Matrix.init(std.testing.allocator, 2, 2);
+    var c = try Matrix.init(std.testing.allocator, 2, 2);
+    // var s = [_]f64{ 1, 2, 3, 4 };
+    defer {
+        m.deinit();
+        b.deinit();
+        c.deinit();
+    }
+    _ = try b.fill(5);
+    _ = try c.fill(0);
+    _ = try m.data.append(1);
+    _ = try m.data.append(2);
+    _ = try m.data.append(3);
+    _ = try m.data.append(4);
+
+    m.render("m");
+    b.render("b");
+
+    _ = try m.multiply(&b, &c);
+    c.render("m * b = c");
+    _ = try c.apply(sigmoid);
+    c.render("sigmoid");
+    _ = try c.apply(tanh);
+    c.render("sigmoid -> tanh");
+}
