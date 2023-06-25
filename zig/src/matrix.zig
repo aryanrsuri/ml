@@ -81,6 +81,17 @@ pub const Matrix = struct {
         if (self.n != B.n) {
             return error.MatrixSpaceUnequal;
         }
+        var i: usize = 0;
+        while (i < B.m) : (i += 1) {
+            var j: usize = 0;
+            while (j < B.n) : (j += 1) {
+                const map_A = self.enumerate(i, j);
+                const map_B = C.enumerate(i, j);
+                A.data.items[map_A.?.pos] += map_A.?.elem + map_B.?.elem;
+            }
+        }
+
+        return A;
     }
 
     pub fn render(self: *Self, title: []const u8) void {
