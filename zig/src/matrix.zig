@@ -24,11 +24,11 @@ pub const Matrix = struct {
         };
     }
 
-    fn deinit(self: *Self) void {
+    pub fn deinit(self: *Self) void {
         self.data.deinit();
     }
 
-    fn enumerate(self: *Self, m: usize, n: usize) ?Map {
+    pub fn enumerate(self: *Self, m: usize, n: usize) ?Map {
         if (m > self.m or n > self.n or m < 0 or n < 0) {
             return null;
         }
@@ -37,13 +37,13 @@ pub const Matrix = struct {
         return map;
     }
 
-    fn fill(self: *Self, x: f64) !void {
+    pub fn fill(self: *Self, x: f64) !void {
         for (0..self.data.capacity) |i| {
             try self.data.replaceRange(i, 1, &[1]f64{x});
         }
     }
 
-    fn apply(self: *Self, comptime func: fn (f64) f64) !void {
+    pub fn apply(self: *Self, comptime func: fn (f64) f64) !void {
         var i: usize = 0;
         while (i < self.m) : (i += 1) {
             var j: usize = 0;
@@ -55,7 +55,7 @@ pub const Matrix = struct {
         }
     }
 
-    fn multiply(self: *Self, B: *Matrix, C: *Matrix) !*Matrix {
+    pub fn multiply(self: *Self, B: *Matrix, C: *Matrix) !*Matrix {
         if (self.n != B.n or C.m != self.m or C.n != B.n) {
             return error.MatrixSpaceUnequal;
         }
@@ -76,7 +76,14 @@ pub const Matrix = struct {
 
         return C;
     }
-    fn render(self: *Self, title: []const u8) void {
+
+    pub fn sum(self: *Self, B: *Matrix) !*Matrix {
+        if (self.n != B.n) {
+            return error.MatrixSpaceUnequal;
+        }
+    }
+
+    pub fn render(self: *Self, title: []const u8) void {
         std.debug.print("{s} [", .{title});
         for (0..self.data.capacity) |i| {
             std.debug.print(" {} ", .{self.data.items[i]});

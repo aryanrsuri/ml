@@ -1,7 +1,9 @@
 const std = @import("std");
 const alg = @import("algebra.zig");
 const rg = std.rand.DefaultPrng;
-const af = alg.activation_functions;
+const sigmoid = alg.sigmoid;
+const binaryrect = alg.BinaryRe;
+const tanh = alg.tanh;
 
 const eps: f64 = 1e-3;
 const k: f64 = 1e-1;
@@ -30,7 +32,7 @@ const NAND_SET = [4][3]f64{
 fn cost(w: f64, w2: f64, b: f64, training_set: [4][3]f64) f64 {
     var c: f64 = 0;
     for (training_set) |row| {
-        const linf = af.tanh((row[0] * w) + (row[1] * w2) + b);
+        const linf = tanh((row[0] * w) + (row[1] * w2) + b);
         const diff = linf - row[2];
         c += diff * diff;
     }
@@ -69,7 +71,7 @@ test "Linear Model" {
     const y = try lc_model(NAND_SET);
     for (NAND_SET) |row| {
         var res = (y[0] * row[0]) + (y[1] * row[1]) + y[2];
-        res = alg.activation_functions.BinaryRe(res);
+        res = binaryrect(res);
         std.debug.print("\n{} ^ {}  = {} and exp {} (COST: {})\n", .{ row[0], row[1], res, row[2], y[3] });
     }
 }
