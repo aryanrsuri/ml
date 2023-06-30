@@ -28,7 +28,7 @@ pub const Matrix = struct {
         self.data.deinit();
     }
 
-    pub fn enumerate(self: *Self, m: usize, n: usize) ?Map {
+    fn enumerate(self: *Self, m: usize, n: usize) ?Map {
         if (m > self.m or n > self.n or m < 0 or n < 0) {
             return null;
         }
@@ -77,7 +77,7 @@ pub const Matrix = struct {
         return C;
     }
 
-    pub fn sum(self: *Self, B: *Matrix) !*Matrix {
+    pub fn sum(self: *Self, B: *Matrix) !void {
         if (self.n != B.n) {
             return error.MatrixSpaceUnequal;
         }
@@ -86,16 +86,14 @@ pub const Matrix = struct {
             var j: usize = 0;
             while (j < B.n) : (j += 1) {
                 const map_A = self.enumerate(i, j);
-                const map_B = C.enumerate(i, j);
-                A.data.items[map_A.?.pos] += map_A.?.elem + map_B.?.elem;
+                const map_B = B.enumerate(i, j);
+                self.data.items[map_A.?.pos] = map_A.?.elem + map_B.?.elem;
             }
         }
-
-        return A;
     }
 
     pub fn render(self: *Self, title: []const u8) void {
-        std.debug.print("{s} [", .{title});
+        std.debug.print("\n        {s} \n[", .{title});
         for (0..self.data.capacity) |i| {
             std.debug.print(" {} ", .{self.data.items[i]});
         }
@@ -119,9 +117,10 @@ test "matrix" {
     _ = try b.fill(3);
     m.render("m");
     b.render("b");
-
+    _ = try m.sum(&b);
+    m.render("summed m of b");
     _ = try m.multiply(&b, &c);
-    c.render("m * b = c");
+    c.render("result of multipling m and v");
     _ = try c.apply(sigmoid);
     c.render("sigmoid");
     _ = try c.apply(tanh);
