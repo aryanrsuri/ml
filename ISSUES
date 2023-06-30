@@ -1,0 +1,4 @@
+/zig/src/xor_model.zig
+* struct fields are constant, but being matrices they need to be mutable, how to fix I look back to the video
+* not sure how to do forward propogations correctly
+
