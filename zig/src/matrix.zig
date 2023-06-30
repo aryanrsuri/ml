@@ -28,7 +28,7 @@ pub const Matrix = struct {
         self.data.deinit();
     }
 
-    fn enumerate(self: *Self, m: usize, n: usize) ?Map {
+    pub fn enumerate(self: *Self, m: usize, n: usize) ?Map {
         if (m > self.m or n > self.n or m < 0 or n < 0) {
             return null;
         }

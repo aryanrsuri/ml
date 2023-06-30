@@ -6,15 +6,15 @@ const Matrix = matrix.Matrix;
 const sigmoid = algebra.sigmoid;
 const tanh = algebra.tanh;
 
-pub const xor = struct {
+const xor = struct {
     const Self = @This();
-    inputs: Matrix,
-    w1: Matrix,
-    w2: Matrix,
-    a1: Matrix,
-    a2: Matrix,
-    b1: Matrix,
-    b2: Matrix,
+    inputs: *Matrix,
+    w1: *Matrix,
+    w2: *Matrix,
+    a1: *Matrix,
+    a2: *Matrix,
+    b1: *Matrix,
+    b2: *Matrix,
 
     fn deinit(self: *Self) void {
         self.a1.deinit();
@@ -28,14 +28,15 @@ pub const xor = struct {
 };
 
 pub fn xor_model(alloc: std.mem.Allocator) !void {
+    var m_1_2 = try Matrix.init(alloc, 1, 2);
     var xm: xor = .{
-        .inputs = try Matrix.init(alloc, 1, 2),
-        .w1 = try Matrix.init(alloc, 1, 2),
-        .w2 = try Matrix.init(alloc, 1, 2),
-        .a1 = try Matrix.init(alloc, 1, 2),
-        .a2 = try Matrix.init(alloc, 1, 2),
-        .b1 = try Matrix.init(alloc, 1, 2),
-        .b2 = try Matrix.init(alloc, 1, 2),
+        .inputs = &m_1_2,
+        .w1 = &m_1_2,
+        .w2 = &m_1_2,
+        .a1 = &m_1_2,
+        .a2 = &m_1_2,
+        .b1 = &m_1_2,
+        .b2 = &m_1_2,
     };
     defer xm.deinit();
     _ = try xm.inputs.data.append(1);
@@ -52,20 +53,20 @@ pub fn xor_model(alloc: std.mem.Allocator) !void {
             const m1: ?Map = xm.inputs.enumerate(0, 0);
             const m2: ?Map = xm.inputs.enumerate(0, 1);
 
-            xm.inputs.data.items[m1.?.pos] = @floatFromInt(f64, i);
-            xm.inputs.data.items[m2.?.pos] = @floatFromInt(f64, j);
+            xm.inputs.data.items[m1.?.pos] = @floatFromInt(i);
+            xm.inputs.data.items[m2.?.pos] = @floatFromInt(j);
             xm.a2.data = forward_propogate(xm);
         }
     }
 }
 
-fn forward_propogate(model: xor) std.ArrayList(f64) {
-    model.inputs.multiply(&model.w1, &model.a1);
-    model.a1.sum(model.b1);
-    model.a1.apply(sigmoid);
-    model.a1.multiply(model.w2, model.a2);
-    model.a2.sum(model.b2);
-    model.a2.apply(sigmoid);
+fn forward_propogate(model: xor) !std.ArrayList(f64) {
+    model.a1 = try model.inputs.multiply(model.w1, model.a1);
+    try model.a1.sum(model.b1);
+    try model.a1.apply(sigmoid);
+    try model.a1.multiply(model.w2, model.a2);
+    try model.a2.sum(model.b2);
+    try model.a2.apply(sigmoid);
 
     return model.a2.data;
 }
