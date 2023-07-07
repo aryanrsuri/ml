@@ -9,6 +9,12 @@ import {
   matrix_sum,
 } from "../lib/algebra.ts";
 import * as atf from "../lib/activations.ts";
+const XOR_SET = [
+  [0, 0, 0],
+  [0, 1, 1],
+  [1, 0, 1],
+  [1, 1, 0],
+];
 
 export type xor_gate = {
   inputs: Matrix;
@@ -35,6 +41,7 @@ export function cost(m: xor_gate, train_in: Matrix, train_out: Matrix) {
     throw new Error(`matrix spaces unequal`);
   }
 
+  let cost = 0;
   for (let i = 0; i < train_in.m; i++) {
     for (let j = 0; j < train_in.n; j++) {
     }
